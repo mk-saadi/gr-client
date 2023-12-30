@@ -61,8 +61,8 @@ const state = [
 
 const Register = () => {
 	const { toastType, toastMessage, showToast, hideToast } = useToast();
-	const { signUp, updateProfileInfo } = useContext(AuthContext);
-	const [selected, setSelected] = useState(gender);
+	const { signUp } = useContext(AuthContext);
+	const [selected, setSelected] = useState(gender[0]);
 
 	const [selectedCity, setSelectedCity] = useState(city[0]);
 	const [selectedState, setSelectedState] = useState(state[0]);
@@ -84,14 +84,18 @@ const Register = () => {
 		event.preventDefault();
 
 		const form = event.target;
-		const image = form.image.files[0];
 		const name = form.name.value;
 		const email = form.email.value;
 		const password = form.password.value;
-
-		if (!image) {
-			return showToast("error", "Pleases upload an image");
-		}
+		const gender = selected.name;
+		const city = selectedCity.ci;
+		const state = selectedState.name;
+		const checkedCheckboxes = form.querySelectorAll(
+			'#hearAboutUs input[type="checkbox"]:checked'
+		);
+		const hearAboutUsValues = Array.from(checkedCheckboxes).map(
+			(checkbox) => checkbox.name
+		);
 
 		if (password.length < 6) {
 			return showToast(
@@ -100,79 +104,34 @@ const Register = () => {
 			);
 		}
 
-		signUp(email, password)
-			.then((res) => {
-				if (res.user) {
-					const storageRef = ref(storage, email);
-					const uploadTask = uploadBytesResumable(storageRef, image);
+		const userDocument = {
+			name,
+			email,
+			password,
+			hearAboutUsValues,
+			gender,
+			city,
+			state,
+		};
+		console.log("userDocument: ", userDocument);
 
-					uploadTask.on(
-						"state_changed",
-						(snapshot) => {
-							console.log(
-								"Upload is " +
-									(snapshot.bytesTransferred /
-										snapshot.totalBytes) *
-										100 +
-									"% done"
-							);
-						},
-						(error) => {
-							console.log(error.message);
-						},
-						() => {
-							getDownloadURL(uploadTask.snapshot.ref).then(
-								(downloadURL) => {
-									const userDocument = {
-										photo: downloadURL,
-										name: name,
-										email: email,
-									};
-									updateProfileInfo(name, downloadURL);
-
-									try {
-										const response = axios.post(
-											"http://localhost:2000/users",
-											userDocument
-										);
-										if (
-											response.data.acknowledged === true
-										) {
-											showToast(
-												"success",
-												"Registration successful!"
-											);
-											form.reset();
-										}
-									} catch (error) {
-										showToast(
-											"error",
-											"Couldn't register, please try again!"
-										);
-									}
-
-									// axios
-									// 	.post("http://localhost:2000/users",userDocument)
-									// 	.then((response) => {
-									// 		if (response.data.acknowledged ===true) {
-									// 			showToast("success","Registration successful!");
-									// 			form.reset();
-									// 		}
-									// 	})
-									// 	.catch((error) => {
-									// 		showToast("error","Couldn't store data to database!");
-									// 	});
-								}
-							);
-						}
-					);
-				} else {
-					showToast("error", "Error singing in user!");
-				}
-			})
-			.catch((error) => {
-				showToast("error", "Error singing in user!");
-			});
+		// signUp(email, password)
+		// 	.then((res) => {
+		// 		axios
+		// 			.post("http://localhost:2000/users",userDocument)
+		// 			.then((response) => {
+		// 				if (response.data.acknowledged ===true) {
+		// 					showToast("success","Registration successful!");
+		// 					form.reset();
+		// 				}
+		// 			})
+		// 			.catch((error) => {
+		// 				showToast("error","Couldn't store data to database!");
+		// 			});
+		// 	})
+		// 	.catch((error) => {
+		// 		showToast("error", "Error singing in user!");
+		// 	});
 	};
 
 	return (
@@ -481,7 +440,7 @@ const Register = () => {
 							</div>
 
 							<div>
-								<fieldset>
+								<fieldset id="hearAboutUs">
 									<legend className="text-sm font-semibold leading-6 text-gray-900">
 										How did you hear about us?
 									</legend>
@@ -563,9 +522,27 @@ const Register = () => {
 							</div>
 
 							<div>
+								<label
+									htmlFor="password"
+									className="block text-sm font-medium leading-6 text-gray-900"
+								>
+									Password
+								</label>
+								<div className="mt-2">
+									<input
+										id="password"
+										name="password"
+										type="password"
+										autoComplete="password"
+										required
+										className="block w-full rounded-none border-0 py-1.5 text-gray-700 shadow-md ring-1 ring-inset ring-[#645104] placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:outline-none px-2 font-semibold"
+									/>
+								</div>
+							</div>
+
+							<div>
 								<button
 									type="submit"
-									// className="w-full rounded-none bg-gradient-to-b from-[#f7cf31] to-[#c59e00] active:scale-95  px-3 py-1.5 font-semibold leading-6 text-[#645104] hover:bg-[#d4b228] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#645104] duration-200 shadow-lg shadow-gray-900/20"
 									className="submitButton"
 								>
 									Sign up
