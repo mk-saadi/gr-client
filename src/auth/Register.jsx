@@ -82,8 +82,8 @@ const Register = () => {
 		const form = event.target;
 		const name = form.name.value;
 		const email = form.email.value;
-		const password = form.password.value;
 		const phone = form.phone.value;
+		const password = form.password.value;
 		const gender = selected.name;
 		const city = selectedCity.ci;
 		const state = selectedState.name;
@@ -123,9 +123,13 @@ const Register = () => {
 					if (response.data.acknowledged === true) {
 						showToast("success", "Registration successful!");
 						form.reset();
+
 						setTimeout(() => {
-							navigate("/home");
-						}, 1500);
+							showToast("loading", "Redirecting");
+							setTimeout(() => {
+								navigate("/");
+							}, 500);
+						}, 1000);
 					}
 				} catch (error) {
 					showToast("error", "Couldn't store data to database!");
@@ -145,13 +149,13 @@ const Register = () => {
 					onHide={hideToast}
 				/>
 			)}
-			<div className="flex flex-col justify-center flex-1 min-h-full px-6 py-12 mt-16 md:mt-48 lg:mt-32 xl:mt-44 md:px-0">
+			<div className="flex flex-col justify-center flex-1 min-h-full px-6 py-12 md:px-0">
 				<div className="h-full sm:mx-auto sm:w-full sm:max-w-sm">
 					<Fade
 						triggerOnce
 						className="text-[#f7cf31] text-3xl text-center font-semibold"
 					>
-						GURUKUL
+						KHALED
 					</Fade>
 					<Fade
 						triggerOnce
@@ -265,7 +269,7 @@ const Register = () => {
                                                                 relative flex cursor-pointer rounded-none px-5 py-1 shadow-md focus:outline-none  ring-1 ring-[#645104]`
 													}
 												>
-													{({ active, checked }) => (
+													{({ checked }) => (
 														<>
 															<div className="flex items-center justify-between w-full">
 																<div className="flex items-center">

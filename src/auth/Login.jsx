@@ -32,35 +32,16 @@ const Login = () => {
 				showToast("success", "successfully signed in");
 				form.reset();
 
-				navigate("/");
-				// setTimeout(() => {
-				// 	navigate("/home");
-				// }, 1500);
+				setTimeout(() => {
+					showToast("loading", "Redirecting");
+					setTimeout(() => {
+						navigate("/");
+					}, 500);
+				}, 1000);
 			}
 		} catch (error) {
-			showToast("error", "Error, please try again");
+			showToast("error", "User not found, please try again");
 		}
-
-		// signIn(email, password)
-		// 	.then((res) => {
-		// 		const user = res.user;
-		// 		if (user.uid) {
-		// 			showToast(
-		// 				"success",
-		// 				`successfully signed in as ${user.displayName}`
-		// 			);
-		// 			form.reset();
-
-		// 			setTimeout(() => {
-		// 				navigate("/");
-		// 			}, 1500);
-		// 		}
-		// 	})
-		// 	.catch((error) => {
-		// 		passwordInput.value = "";
-
-		// 		showToast("error", "Error, please try again");
-		// 	});
 	};
 
 	return (
@@ -78,7 +59,7 @@ const Login = () => {
 						triggerOnce
 						className="text-[#f7cf31] text-3xl text-center font-semibold"
 					>
-						GURUKUL
+						KHALED
 					</Fade>
 					<Fade
 						triggerOnce

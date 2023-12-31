@@ -7,19 +7,19 @@ body {
 }
 
 ::-webkit-scrollbar {
-    width: 6px;
+	width: 6px;
 }
 
 /* ::-webkit-scrollbar-track {
 	background-color: currentColor;
 } */
 ::-webkit-scrollbar-thumb {
-    background-color: #f7cf31;
-    /* border-radius: 4px; */
+	background-color: #f7cf31;
+	/* border-radius: 4px; */
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: #fab07a;
+	background-color: #fab07a;
 }
 
 .submitButton {
@@ -29,26 +29,29 @@ body {
 	padding-right: 0.75rem;
 	padding-top: 0.375rem;
 	padding-bottom: 0.375rem;
-    font-weight: 600;
-    line-height: 1.5;
-    color: #645104;
+	font-weight: 600;
+	line-height: 1.5;
+	color: #645104;
 	background: linear-gradient(to bottom, #f7cf31, #c59e00);
-    transition-duration: 0.2s;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2),
-            0 2px 4px -1px rgba(0, 0, 0, 0.1);
+	transition-duration: 0.2s;
+	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2),
+		0 2px 4px -1px rgba(0, 0, 0, 0.1);
+	cursor: pointer;
 }
 .submitButton:active {
 	transform: scale(0.95);
 }
-.submitButton:focus-visible{
-    outline: 2px solid #645104;
-    /* outline-color: #645104; */
-    outline-offset: 2px;
-    outline-width: 2px;
+.submitButton:focus-visible {
+	outline: 2px solid #645104;
+	/* outline-color: #645104; */
+	outline-offset: 2px;
+	outline-width: 2px;
 }
-
-.border-right{
-    --mask: conic-gradient(from -135deg at right, #0000, #000 1deg 90deg, #0000 90deg) 50%/100% 84.00px;
-        -webkit-mask: var(--mask);
-        mask: var(--mask);
+.goBack:active {
+	transform: scale(0.95);
+}
+.goBack:focus-visible {
+	outline: 2px solid #919191;
+	outline-offset: 2px;
+	outline-width: 2px;
 }
