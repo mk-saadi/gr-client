@@ -1,4 +1,5 @@
 import { Fragment, useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../provider/AuthProvider";
 import axios from "axios";
 import {
@@ -6,12 +7,7 @@ import {
 	CheckIcon,
 	ChevronsUpDown,
 	ChevronsUpDownIcon,
-	Eye,
-	EyeOff,
-	ImagePlus,
 } from "lucide-react";
-import { storage } from "../firebase/firebase.config";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { Fade } from "react-awesome-reveal";
 import Toast from "../hooks/Toast";
 import useToast from "../hooks/useToast";
@@ -62,13 +58,13 @@ const state = [
 const Register = () => {
 	const { toastType, toastMessage, showToast, hideToast } = useToast();
 	const { signUp } = useContext(AuthContext);
-	const [selected, setSelected] = useState(gender[0]);
+	const navigate = useNavigate();
 
+	const [selected, setSelected] = useState(gender[0]);
 	const [selectedCity, setSelectedCity] = useState(city[0]);
 	const [selectedState, setSelectedState] = useState(state[0]);
 
 	const [query, setQuery] = useState("");
-
 	const filteredState =
 		query === ""
 			? state
@@ -87,6 +83,7 @@ const Register = () => {
 		const name = form.name.value;
 		const email = form.email.value;
 		const password = form.password.value;
+		const phone = form.phone.value;
 		const gender = selected.name;
 		const city = selectedCity.ci;
 		const state = selectedState.name;
@@ -112,26 +109,31 @@ const Register = () => {
 			gender,
 			city,
 			state,
+			phone,
 		};
-		console.log("userDocument: ", userDocument);
 
-		// signUp(email, password)
-		// 	.then((res) => {
-		// 		axios
-		// 			.post("http://localhost:2000/users",userDocument)
-		// 			.then((response) => {
-		// 				if (response.data.acknowledged ===true) {
-		// 					showToast("success","Registration successful!");
-		// 					form.reset();
-		// 				}
-		// 			})
-		// 			.catch((error) => {
-		// 				showToast("error","Couldn't store data to database!");
-		// 			});
-		// 	})
-		// 	.catch((error) => {
-		// 		showToast("error", "Error singing in user!");
-		// 	});
+		try {
+			const res = await signUp(email, password);
+			if (res.user) {
+				try {
+					const response = await axios.post(
+						"http://localhost:2500/users",
+						userDocument
+					);
+					if (response.data.acknowledged === true) {
+						showToast("success", "Registration successful!");
+						form.reset();
+						setTimeout(() => {
+							navigate("/home");
+						}, 1500);
+					}
+				} catch (error) {
+					showToast("error", "Couldn't store data to database!");
+				}
+			}
+		} catch (error) {
+			showToast("error", "Error singing in user!");
+		}
 	};
 
 	return (
@@ -143,18 +145,28 @@ const Register = () => {
 					onHide={hideToast}
 				/>
 			)}
-			<div className="flex min-h-full flex-1 flex-col justify-center px-6 md:px-0 py-12">
-				<div className="sm:mx-auto sm:w-full sm:max-w-sm lg:mt-64 h-full">
-					<p className="text-[#f7cf31] text-3xl text-center font-semibold">
+			<div className="flex flex-col justify-center flex-1 min-h-full px-6 py-12 mt-16 md:mt-48 lg:mt-32 xl:mt-44 md:px-0">
+				<div className="h-full sm:mx-auto sm:w-full sm:max-w-sm">
+					<Fade
+						triggerOnce
+						className="text-[#f7cf31] text-3xl text-center font-semibold"
+					>
 						GURUKUL
-					</p>
-					<h2 className="mt-4 text-center text-xl font-bold leading-9 tracking-tight text-gray-900">
+					</Fade>
+					<Fade
+						triggerOnce
+						className="mt-4 text-xl font-bold leading-9 tracking-tight text-center text-gray-900"
+					>
 						Create a new account
-					</h2>
+					</Fade>
 				</div>
 
 				<div className="">
-					<div className=" sm:mx-auto sm:w-full sm:max-w-sm">
+					<Fade
+						damping={1}
+						triggerOnce
+						className=" sm:mx-auto sm:w-full sm:max-w-sm"
+					>
 						<form
 							className="space-y-6"
 							onSubmit={handleSignUp}
@@ -196,6 +208,24 @@ const Register = () => {
 									/>
 								</div>
 							</div>
+							<div>
+								<label
+									htmlFor="phone"
+									className="block text-sm font-medium leading-6 text-gray-900"
+								>
+									Phone number
+								</label>
+								<div className="mt-2">
+									<input
+										id="phone"
+										name="phone"
+										type="number"
+										autoComplete="phone"
+										required
+										className="block w-full rounded-none border-0 py-1.5 text-gray-700 shadow-md ring-1 ring-inset ring-[#645104] placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:outline-none px-2 font-semibold"
+									/>
+								</div>
+							</div>
 
 							{/* gender*/}
 							<div className="w-full">
@@ -205,7 +235,7 @@ const Register = () => {
 								>
 									Select your gender.
 								</label>
-								<div className="mx-auto w-full max-w-md mt-2">
+								<div className="w-full max-w-md mx-auto mt-2">
 									<RadioGroup
 										value={selected}
 										onChange={setSelected}
@@ -213,7 +243,7 @@ const Register = () => {
 										<RadioGroup.Label className="sr-only">
 											Server size
 										</RadioGroup.Label>
-										<div className="space-x-2 flex justify-start w-full">
+										<div className="flex justify-start w-full space-x-2">
 											{gender.map((plan) => (
 												<RadioGroup.Option
 													key={plan.name}
@@ -237,7 +267,7 @@ const Register = () => {
 												>
 													{({ active, checked }) => (
 														<>
-															<div className="flex w-full items-center justify-between">
+															<div className="flex items-center justify-between w-full">
 																<div className="flex items-center">
 																	<div className="text-sm">
 																		<RadioGroup.Label
@@ -350,7 +380,7 @@ const Register = () => {
 									<div className="relative mt-2">
 										<div className="relative w-full cursor-default overflow-hidden rounded-none bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 border border-[#645104] focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:text-sm">
 											<Combobox.Input
-												className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
+												className="w-full py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 border-none focus:ring-0"
 												displayValue={(state) =>
 													state.name
 												}
@@ -360,7 +390,7 @@ const Register = () => {
 											/>
 											<Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
 												<ChevronsUpDownIcon
-													className="h-5 w-5 text-gray-400"
+													className="w-5 h-5 text-gray-400"
 													aria-hidden="true"
 												/>
 											</Combobox.Button>
@@ -373,12 +403,12 @@ const Register = () => {
 											afterLeave={() => setQuery("")}
 										>
 											<Combobox.Options
-												className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm"
+												className="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black/5 focus:outline-none sm:text-sm"
 												style={{ zIndex: "999" }}
 											>
 												{filteredState.length === 0 &&
 												query !== "" ? (
-													<div className="relative cursor-default select-none px-4 py-2 text-gray-700">
+													<div className="relative px-4 py-2 text-gray-700 cursor-default select-none">
 														Nothing found.
 													</div>
 												) : (
@@ -422,7 +452,7 @@ const Register = () => {
 																				}`}
 																			>
 																				<CheckIcon
-																					className="h-5 w-5"
+																					className="w-5 h-5"
 																					aria-hidden="true"
 																				/>
 																			</span>
@@ -550,16 +580,16 @@ const Register = () => {
 							</div>
 						</form>
 
-						<p className="mt-10 text-center text-sm text-gray-500">
+						<p className="mt-6 mb-4 text-sm text-center text-gray-500">
 							Already a member?{" "}
-							<a
-								href="/login"
-								className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+							<Link
+								to="/login"
+								className="font-semibold leading-6 text-[#c59e00] hover:underline"
 							>
 								Sign in.
-							</a>
+							</Link>
 						</p>
-					</div>
+					</Fade>
 				</div>
 			</div>
 		</>

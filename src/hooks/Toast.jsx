@@ -47,7 +47,7 @@ const Toast = ({ type, message, onHide }) => {
 			direction="down"
 		>
 			<div
-				className={` bg-white  font-semibold rounded-md shadow-md drop-shadow-md ${toastClasses[type]}`}
+				className={` bg-white  font-semibold rounded-none shadow-xl drop-shadow-md ${toastClasses[type]}`}
 			>
 				<p className="flex flex-row items-center justify-center px-4 py-4 font-semibold gap-x-4">
 					{iconComponent}
