@@ -10,6 +10,7 @@ import { Dialog, Transition } from "@headlessui/react";
 const UserDetail = () => {
 	const { toastType, toastMessage, showToast, hideToast } = useToast();
 	const [user, setUser] = useState([]);
+	console.log("user: ", user);
 	const { id } = useParams();
 	const navigate = useNavigate();
 
@@ -78,29 +79,46 @@ const UserDetail = () => {
 				/>
 			)}
 			<div className="flex flex-col items-center justify-center h-screen mx-auto max-w-prose">
-				<div className="flex items-center justify-center gap-x-3">
+				<div className="flex flex-col items-center justify-center gap-x-3">
 					<Fade
 						triggerOnce
 						damping={1}
 					>
-						<div className="flex flex-col items-center justify-center px-4 py-2 border shadow-md md:flex-row bg-gray-200/70 border-yellow-900/20">
+						<div className="flex flex-col items-center justify-center px-4 py-8 border shadow-md bg-gray-200/70 border-yellow-900/30">
 							<div className="pr-4">
-								<User className="w-20 h-20 text-gray-700" />
+								<User className="w-24 h-24 p-2 text-gray-700 bg-gray-100 rounded-full drop-shadow-sm" />
 							</div>
 							<div className="flex flex-col">
-								<p className="text-lg font-semibold text-gray-700">
-									User name: {user.name}
+								<p className="mt-6 text-lg font-semibold text-center text-gray-700">
+									{user.name}
 								</p>
-								<p>User email: {user.email}</p>
-								<p>User phone number: {user.phone}</p>
-								<p>Added by: {user.addedBy}</p>
+
+								<div className="mt-2 font-semibold text-gray-700">
+									<p>User email: {user.email}</p>
+									<p>User phone number: {user.phone}</p>
+									<p className="mt-1.5">
+										Added by: {user.addedBy}
+									</p>
+									{user?.createdAt && (
+										<p>
+											Create at:{" "}
+											{user?.createdAt.split("T")[0]}
+										</p>
+									)}
+								</div>
 							</div>
 						</div>
 					</Fade>
 
-					<Fade>
-						<div className="flex flex-col h-full gap-2 p-1 border border-yellow-900/20">
-							<Link to={`/editUser/${user._id}`}>
+					<Fade
+						className="w-full"
+						triggerOnce
+					>
+						<div className="flex flex-row justify-center w-full h-full gap-2 pt-5">
+							<Link
+								to={`/editUser/${user._id}`}
+								className="w-full"
+							>
 								<label
 									htmlFor="editUser"
 									className="sr-only"
@@ -109,14 +127,14 @@ const UserDetail = () => {
 								</label>
 								<button
 									id="editUser"
-									className="submitButton"
+									className="flex justify-center submitButton "
 									title="edit user info?"
 								>
 									<Pencil />
 								</button>
 							</Link>
 
-							<div>
+							<div className="w-full">
 								<label
 									htmlFor="deleteUser"
 									className="sr-only"
@@ -125,18 +143,18 @@ const UserDetail = () => {
 								</label>
 								<button
 									id="deleteUser"
-									className="h-full logOutButton"
+									className="flex justify-center h-full logOutButton "
 									title="delete user?"
 									onClick={() => openModal(user._id)}
 								>
 									<Eraser />
 								</button>
 							</div>
-							<div>
+							<div className="w-full">
 								<button
 									type="button"
 									onClick={handleGoBack}
-									className="goBack"
+									className="flex justify-center goBack"
 								>
 									<ArrowLeftFromLine />
 								</button>

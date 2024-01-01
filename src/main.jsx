@@ -1,8 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-// import Main from "./layout/Main";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
 import AuthProvider from "./provider/AuthProvider";

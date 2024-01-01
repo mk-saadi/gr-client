@@ -11,19 +11,14 @@ body {
 ::-webkit-scrollbar {
 	width: 6px;
 }
-
-/* ::-webkit-scrollbar-track {
-	background-color: currentColor;
-} */
 ::-webkit-scrollbar-thumb {
 	background-color: #f7cf31;
-	/* border-radius: 4px; */
 }
-
 ::-webkit-scrollbar-thumb:hover {
 	background-color: #fab07a;
 }
 
+/* main/submit button */
 .submitButton {
 	width: 100%;
 	border-radius: 0;
@@ -39,6 +34,7 @@ body {
 	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2),
 		0 2px 4px -1px rgba(0, 0, 0, 0.1);
 	cursor: pointer;
+	text-align: center;
 }
 @media (max-width: 900px) {
 	.submitButton {
@@ -57,6 +53,7 @@ body {
 			0 2px 4px -1px rgba(0, 0, 0, 0.1);
 		cursor: pointer;
 		font-size: small;
+		text-align: center;
 	}
 }
 .submitButton:active {
