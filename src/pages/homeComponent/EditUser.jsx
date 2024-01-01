@@ -64,6 +64,10 @@ const EditUser = () => {
 		}
 	};
 
+	const handleGoBack = () => {
+		navigate(-1);
+	};
+
 	return (
 		<>
 			{toastType && (
@@ -74,7 +78,29 @@ const EditUser = () => {
 				/>
 			)}
 
-			<div className="flex items-center justify-center h-screen">
+			<div className="flex flex-col items-center justify-center h-screen">
+				<Fade
+					triggerOnce
+					damping={1}
+				>
+					<p className="text-xl font-semibold leading-6 text-center text-gray-700">
+						Update user?
+					</p>
+				</Fade>
+
+				<Fade
+					triggerOnce
+					damping={1}
+					className="flex items-center justify-center"
+				>
+					<div className="mt-3 text-xs text-center text-gray-500 md:text-sm max-w-prose">
+						<p>
+							Enter the required information's below to add new
+							user to database.
+						</p>
+					</div>
+				</Fade>
+
 				<Fade
 					damping={1}
 					triggerOnce
@@ -145,17 +171,17 @@ const EditUser = () => {
 						</div>
 
 						<div className="flex justify-between mt-4 gap-x-14">
-							<Link
+							<button
 								className="goBack"
-								to="/"
+								onClick={handleGoBack}
 							>
 								Go back
-							</Link>
+							</button>
 
 							<input
 								type="submit"
 								className="submitButton"
-								value="Update user!"
+								value="Update"
 							/>
 						</div>
 					</form>

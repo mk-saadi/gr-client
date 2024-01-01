@@ -64,6 +64,10 @@ const UserDetail = () => {
 		}
 	};
 
+	const handleGoBack = () => {
+		navigate(-1);
+	};
+
 	return (
 		<>
 			{toastType && (
@@ -128,14 +132,15 @@ const UserDetail = () => {
 									<Eraser />
 								</button>
 							</div>
-							<Link to="/">
+							<div>
 								<button
 									type="button"
+									onClick={handleGoBack}
 									className="goBack"
 								>
 									<ArrowLeftFromLine />
 								</button>
-							</Link>
+							</div>
 						</div>
 					</Fade>
 				</div>
