@@ -1,4 +1,12 @@
-import { Eraser, Loader, Pencil, User, UserX } from "lucide-react";
+import {
+	ArrowUpDown,
+	Eraser,
+	Loader,
+	Pencil,
+	Search,
+	User,
+	UserX,
+} from "lucide-react";
 import { useState, Fragment, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fade } from "react-awesome-reveal";
@@ -17,7 +25,9 @@ const AllUser = () => {
 		setLoading(true);
 		const fetchData = async () => {
 			try {
-				const res = await axios.get("http://localhost:2500/addedUsers");
+				const res = await axios.get(
+					"https://gurukul-server-3h0w3v4n4-mk-saadi.vercel.app/addedUsers"
+				);
 				if (res) {
 					setUsers(res.data);
 					setLoading(false);
@@ -35,8 +45,7 @@ const AllUser = () => {
 	const handleSearchChange = (event) => {
 		setSearchQuery(event.target.value);
 	};
-
-	const filteredItems = users.filter((it) =>
+	const filteredItems = users?.filter((it) =>
 		it.name.toLowerCase().includes(searchQuery.toLowerCase())
 	);
 
@@ -56,7 +65,7 @@ const AllUser = () => {
 
 		try {
 			const res = await axios.delete(
-				`http://localhost:2500/addedUsers/${id}`
+				`https://gurukul-server-3h0w3v4n4-mk-saadi.vercel.app/addedUsers/${id}`
 			);
 			if (res.data.deletedCount > 0) {
 				setIsOpen(false);
@@ -71,8 +80,26 @@ const AllUser = () => {
 		}
 	};
 
+	const [sortOrder, setSortOrder] = useState(false);
+
+	const handleSortByName = () => {
+		const sortedUsers = users.sort((a, b) => {
+			const nameA = a.name.toUpperCase();
+			const nameB = b.name.toUpperCase();
+			if (nameA < nameB) {
+				return sortOrder ? -1 : 1;
+			}
+			if (nameA > nameB) {
+				return sortOrder ? 1 : -1;
+			}
+			return 0;
+		});
+		setUsers(sortedUsers);
+		setSortOrder(!sortOrder);
+	};
+
 	return (
-		<div>
+		<div className="mx-3 md:mx-0">
 			{toastType && (
 				<Toast
 					type={toastType}
@@ -84,27 +111,36 @@ const AllUser = () => {
 			{!loading && (
 				<Fade
 					triggerOnce
-					className="w-full mt-10 col-span-full md:mt-0"
+					className="w-full mx-auto mt-10 mb-6 md:max-w-2xl lg:max-w-4xl xl:max-w-5xl md:mt-0"
 				>
-					<div className="relative -mt-6 rounded-md shadow-md">
-						<div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-							<span className="text-gray-500 sm:text-sm">
-								<User />
-							</span>
+					<div className="flex items-center justify-center w-full gap-x-5">
+						<div className="relative w-full">
+							<div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+								<span className="text-[#645104] sm:text-sm">
+									<Search />
+								</span>
+							</div>
+							<input
+								type="text"
+								className="block w-full rounded-none border-0 py-1.5 text-gray-700 shadow-md ring-1 ring-inset ring-[#645104] placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:outline-none px-2 font-semibold placeholder:ml-12 pl-12"
+								required
+								placeholder="search user by name"
+								value={searchQuery}
+								onChange={handleSearchChange}
+							/>
 						</div>
-						<input
-							type="text"
-							name="price"
-							id="price"
-							className="md:text-base block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-md ring-1 ring-inset ring-gray-400 placeholder:text-gray-400 focus:ring-2 focus:ring-inset  focus:ring-[#fab07a] focus:outline-none sm:text-sm sm:leading-6 pl-12"
-							required
-							value={searchQuery}
-							onChange={handleSearchChange}
-						/>
+
+						<div className="flex w-fit ">
+							<button
+								className="flex items-center justify-center goBack gap-x-2 whitespace-nowrap"
+								onClick={handleSortByName}
+							>
+								Sort by name <ArrowUpDown />
+							</button>
+						</div>
 					</div>
 				</Fade>
 			)}
-
 			{loading ? (
 				<div className="h-[80vh]">
 					<div className="flex flex-col items-center justify-center overflow-y-hidden text-[#a16c46]">
@@ -134,6 +170,7 @@ const AllUser = () => {
 					<Fade
 						damping={0.3}
 						cascade
+						triggerOnce
 						role="list"
 						className="py-2 mx-3 space-y-2 divide-y divide-gray-100 md:mx-0"
 					>
@@ -148,9 +185,9 @@ const AllUser = () => {
 							(searchQuery.length === 0
 								? users
 								: filteredItems
-							).map((person) => (
+							).map((us) => (
 								<li
-									key={person._id}
+									key={us._id}
 									className="flex justify-between px-4 pt-2 my-1 duration-200 bg-gray-200/70 gap-x-6 hover:bg-gray-300/70"
 								>
 									<div className="flex justify-between w-full pb-2 border-b border-yellow-900/20">
@@ -158,25 +195,24 @@ const AllUser = () => {
 											<div className="flex-auto min-w-0">
 												<div className="flex items-center justify-start gap-3">
 													<Link
-														to={`/userDetail/${person._id}`}
+														to={`/userDetail/${us._id}`}
 													>
 														<User className="w-10 h-10 text-gray-700" />
 													</Link>
 													<div>
 														<Link
-															to={`/userDetail/${person._id}`}
+															to={`/userDetail/${us._id}`}
 														>
 															<p className="text-sm font-semibold leading-6 text-gray-700 hover:underline">
-																{person.name}
+																{us.name}
 															</p>
 														</Link>
 
 														<p className="text-xs font-medium leading-5 text-gray-500 truncate">
-															{person.email}
+															{us.email}
 														</p>
 														<p className="text-xs font-medium leading-5 text-gray-500 truncate">
-															Phone:{" "}
-															{person.phone}
+															Phone: {us.phone}
 														</p>
 													</div>
 												</div>
@@ -186,13 +222,13 @@ const AllUser = () => {
 											<p className="hidden text-sm font-semibold leading-6 text-gray-700 md:block">
 												Added by:{" "}
 												<span className="text-gray-500">
-													{person?.addedBy}
+													{us?.addedBy}
 												</span>
 											</p>
 
 											<div className="flex flex-col gap-4 md:flex-row ">
 												<Link
-													to={`/editUser/${person._id}`}
+													to={`/editUser/${us._id}`}
 												>
 													<label
 														htmlFor="editUser"
@@ -220,9 +256,7 @@ const AllUser = () => {
 														className="logOutButton"
 														title="delete user?"
 														onClick={() =>
-															openModal(
-																person._id
-															)
+															openModal(us._id)
 														}
 													>
 														<Eraser />
@@ -237,7 +271,6 @@ const AllUser = () => {
 					</Fade>
 				</div>
 			)}
-
 			<Transition
 				appear
 				show={isOpen}

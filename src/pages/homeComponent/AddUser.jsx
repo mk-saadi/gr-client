@@ -36,7 +36,7 @@ const AddUser = ({ user }) => {
 
 		try {
 			const response = await axios.post(
-				"http://localhost:2500/addedUsers",
+				"https://gurukul-server-3h0w3v4n4-mk-saadi.vercel.app/addedUsers",
 				userDocument
 			);
 			if (response.data.acknowledged === true) {
@@ -52,14 +52,17 @@ const AddUser = ({ user }) => {
 	return (
 		<>
 			<div>
+				<label
+					htmlFor="openModal"
+					className="sr-only"
+				>
+					Open modal to add user.
+				</label>
 				<button
+					id="openModal"
 					title="add new user"
 					onClick={openModal}
 					className="submitButton"
-					// style={{
-					// 	boxShadow:
-					// 		" 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.29)",
-					// }}
 				>
 					<BadgePlus />
 				</button>

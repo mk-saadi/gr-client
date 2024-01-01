@@ -17,7 +17,7 @@ const UserDetail = () => {
 		const fetchData = async () => {
 			try {
 				const res = await axios.get(
-					`http://localhost:2500/addedUsers/${id}`
+					`https://gurukul-server-3h0w3v4n4-mk-saadi.vercel.app/addedUsers/${id}`
 				);
 				if (res) {
 					setUser(res.data);
@@ -46,7 +46,7 @@ const UserDetail = () => {
 
 		try {
 			const res = await axios.delete(
-				`http://localhost:2500/addedUsers/${id}`
+				`https://gurukul-server-3h0w3v4n4-mk-saadi.vercel.app/addedUsers/${id}`
 			);
 			if (res.data.deletedCount > 0) {
 				setIsOpen(false);

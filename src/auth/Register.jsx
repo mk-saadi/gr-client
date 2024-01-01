@@ -118,7 +118,7 @@ const Register = () => {
 			if (res.user) {
 				try {
 					const response = await axios.post(
-						"http://localhost:2500/users",
+						"https://gurukul-server-3h0w3v4n4-mk-saadi.vercel.app/users",
 						userDocument
 					);
 					if (response.data.acknowledged === true) {

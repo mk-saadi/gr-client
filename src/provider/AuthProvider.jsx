@@ -57,9 +57,12 @@ const AuthProvider = ({ children }) => {
 			setUser(currentUser);
 			if (currentUser) {
 				axios
-					.post("http://localhost:2500/jwt", {
-						email: currentUser.email,
-					})
+					.post(
+						"https://gurukul-server-3h0w3v4n4-mk-saadi.vercel.app/jwt",
+						{
+							email: currentUser.email,
+						}
+					)
 					.then((data) => {
 						localStorage.setItem(
 							"access-token-gurukul",

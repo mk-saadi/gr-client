@@ -1,5 +1,4 @@
-import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import AddUser from "./homeComponent/AddUser";
 import { AuthContext } from "../provider/AuthProvider";
 import TopNav from "./homeComponent/TopNav";
