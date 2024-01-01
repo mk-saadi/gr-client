@@ -57,7 +57,7 @@ const state = [
 
 const Register = () => {
 	const { toastType, toastMessage, showToast, hideToast } = useToast();
-	const { signUp } = useContext(AuthContext);
+	const { signUp, updateProfileInfo } = useContext(AuthContext);
 	const navigate = useNavigate();
 
 	const [selected, setSelected] = useState(gender[0]);
@@ -114,6 +114,7 @@ const Register = () => {
 
 		try {
 			const res = await signUp(email, password);
+			updateProfileInfo(name);
 			if (res.user) {
 				try {
 					const response = await axios.post(

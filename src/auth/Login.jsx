@@ -29,7 +29,10 @@ const Login = () => {
 			const res = await signIn(email, password);
 			const user = res.user;
 			if (user.uid) {
-				showToast("success", "successfully signed in");
+				showToast(
+					"success",
+					`successfully signed in as ${user.displayName}`
+				);
 				form.reset();
 
 				setTimeout(() => {

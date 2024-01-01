@@ -6,34 +6,23 @@ import TopNav from "./homeComponent/TopNav";
 import AllUser from "./homeComponent/AllUser";
 
 const Home = () => {
-	const [users, setUsers] = useState([]);
 	const { user, logOut } = useContext(AuthContext);
 
-	useEffect(() => {
-		try {
-			const res = axios.get("http://localhost:2500/addedUsers");
-			if (res) {
-				setUsers(res.data);
-			}
-		} catch (error) {
-			console.log(error);
-		}
-	}, []);
 	return (
-		<div className="relative min-h-[200vh]">
+		<div className="relative min-h-screen">
 			<div>
 				<div>
 					<TopNav logOut={logOut} />
 				</div>
 
-				{users && (
+				<div className="mt-8">
 					<div>
-						<AllUser users={users} />
+						<AllUser />
 					</div>
-				)}
+				</div>
 			</div>
 
-			<div className="fixed bottom-4 right-4">
+			<div className="fixed z-50 bottom-4 right-4">
 				<AddUser user={user} />
 			</div>
 		</div>

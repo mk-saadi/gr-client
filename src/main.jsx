@@ -8,6 +8,8 @@ import Register from "./auth/Register";
 import AuthProvider from "./provider/AuthProvider";
 import PrivateRoute from "./route/PrivateRoute";
 import Home from "./pages/Home";
+import UserDetail from "./pages/UserDetail";
+import EditUser from "./pages/homeComponent/EditUser";
 
 const router = createBrowserRouter([
 	{
@@ -15,6 +17,22 @@ const router = createBrowserRouter([
 		element: (
 			<PrivateRoute>
 				<Home />
+			</PrivateRoute>
+		),
+	},
+	{
+		path: "/userDetail/:id",
+		element: (
+			<PrivateRoute>
+				<UserDetail />
+			</PrivateRoute>
+		),
+	},
+	{
+		path: "/editUser/:id",
+		element: (
+			<PrivateRoute>
+				<EditUser />
 			</PrivateRoute>
 		),
 	},
@@ -31,7 +49,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<React.StrictMode>
 		<AuthProvider>
-			<RouterProvider router={router} />
+			<div className="flex flex-col min-h-screen overflow-x-hidden">
+				<RouterProvider router={router} />
+			</div>
 		</AuthProvider>
 	</React.StrictMode>
 );

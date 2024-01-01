@@ -31,16 +31,18 @@ const AddUser = ({ user }) => {
 			name,
 			email,
 			phone,
+			addedBy: user?.displayName,
 		};
 
 		try {
 			const response = await axios.post(
-				"http://localhost:2500/addedUserss",
+				"http://localhost:2500/addedUsers",
 				userDocument
 			);
 			if (response.data.acknowledged === true) {
 				setSuccess("User successfully added to database!");
 				form.reset();
+				window.location.reload();
 			}
 		} catch (error) {
 			setError("Couldn't add user to database!");
@@ -49,16 +51,18 @@ const AddUser = ({ user }) => {
 
 	return (
 		<>
-			<div className="">
-				<div>
-					<button
-						title="add new user"
-						onClick={openModal}
-						className="submitButton"
-					>
-						<BadgePlus />
-					</button>
-				</div>
+			<div>
+				<button
+					title="add new user"
+					onClick={openModal}
+					className="submitButton"
+					// style={{
+					// 	boxShadow:
+					// 		" 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.29)",
+					// }}
+				>
+					<BadgePlus />
+				</button>
 			</div>
 
 			<Transition
@@ -113,7 +117,7 @@ const AddUser = ({ user }) => {
 										damping={1}
 										className="flex items-center justify-center"
 									>
-										<div className="mt-3 text-sm text-gray-500 max-w-prose">
+										<div className="mt-3 text-xs text-center text-gray-500 md:text-sm max-w-prose">
 											<p>
 												Enter the required information's
 												below to add new user to
@@ -130,12 +134,12 @@ const AddUser = ({ user }) => {
 										<form
 											method="POST"
 											onSubmit={handleUser}
-											className="space-y-4"
+											className="space-y-2 md:space-y-4"
 										>
 											<div>
 												<label
 													htmlFor="name"
-													className="block text-sm font-medium leading-6 text-gray-900"
+													className="block text-xs font-medium leading-6 text-gray-900 md:text-sm"
 												>
 													User Name
 												</label>
@@ -153,7 +157,7 @@ const AddUser = ({ user }) => {
 											<div>
 												<label
 													htmlFor="email"
-													className="block text-sm font-medium leading-6 text-gray-900"
+													className="block text-xs font-medium leading-6 text-gray-900 md:text-sm"
 												>
 													Email address
 												</label>
@@ -172,7 +176,7 @@ const AddUser = ({ user }) => {
 											<div>
 												<label
 													htmlFor="phone"
-													className="block text-sm font-medium leading-6 text-gray-900"
+													className="block text-xs font-medium leading-6 text-gray-900 md:text-sm"
 												>
 													Phone number
 												</label>
@@ -200,7 +204,7 @@ const AddUser = ({ user }) => {
 											<div className="flex justify-between mt-4 gap-x-14">
 												<button
 													type="button"
-													className="w-full font-semibold text-gray-700 duration-200 bg-gray-200 rounded-none goBack"
+													className="goBack"
 													onClick={closeModal}
 												>
 													Go back
